@@ -7,7 +7,7 @@ locals {
   ]
 }
 
-resource "google_compute_address" "www" {
+resource "google_compute_global_address" "www" {
   name = local.name
 }
 
@@ -99,9 +99,14 @@ resource "kubernetes_ingress_v1" "www" {
   metadata {
     name      = local.name
     namespace = kubernetes_namespace.www.metadata[0].name
+
+    labels = {
+      app = local.name
+    }
+
     annotations = {
       "kubernetes.io/ingress.class"                 = "gce"
-      "kubernetes.io/ingress.global-static-ip-name" = google_compute_address.www.name
+      "kubernetes.io/ingress.global-static-ip-name" = google_compute_global_address.www.name
       "networking.gke.io/managed-certificates"      = kubernetes_manifest.managed_certificate_www.manifest.metadata.name
       "networking.gke.io/v1beta1.FrontendConfig"    = kubernetes_manifest.frontend_config_www.manifest.metadata.name
     }
