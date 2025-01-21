@@ -22,12 +22,12 @@ resource "kubernetes_manifest" "frontend_config_www" {
     kind       = "FrontendConfig"
 
     metadata = {
+      name      = "www"
+      namespace = kubernetes_namespace.www.metadata[0].name
+
       labels = {
         app = "www"
       }
-
-      name      = "www"
-      namespace = kubernetes_namespace.www.metadata[0].name
     }
 
     spec = {
@@ -47,12 +47,12 @@ resource "kubernetes_manifest" "managed_certificate_www" {
     kind       = "ManagedCertificate"
 
     metadata = {
+      name      = "www"
+      namespace = kubernetes_namespace.www.metadata[0].name
+
       labels = {
         app = "www"
       }
-
-      name      = "www"
-      namespace = kubernetes_namespace.www.metadata[0].name
     }
 
     spec = {

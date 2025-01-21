@@ -1,3 +1,7 @@
+resource "google_service_account" "c0" {
+  account_id = "gke-c0"
+}
+
 resource "google_compute_network" "n0" {
   name = "n0"
 
@@ -37,6 +41,12 @@ resource "google_container_cluster" "c0" {
     stack_type                    = "IPV4"
     services_secondary_range_name = google_compute_subnetwork.n0s0.secondary_ip_range[0].range_name
     cluster_secondary_range_name  = google_compute_subnetwork.n0s0.secondary_ip_range[1].range_name
+  }
+
+  cluster_autoscaling {
+    auto_provisioning_defaults {
+      service_account = google_service_account.c0.email
+    }
   }
 
   deletion_protection = false
